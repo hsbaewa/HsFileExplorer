@@ -44,7 +44,7 @@ public class SampleActivity extends HsActivity implements HsRecyclerView.OnItemC
         setSupportActionBar(mToolbar);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.LinearLayoutContents, HsFileExplorerFragment.newInstance(Environment.getExternalStorageDirectory().getAbsolutePath()));
+        transaction.replace(R.id.LinearLayoutContents, SampleFileFragment.newInstance(Environment.getExternalStorageDirectory().getAbsolutePath(), SampleFileFragment.MODE_LIST));
         transaction.commit();
 
     }
