@@ -21,34 +21,26 @@ import kr.co.hs.widget.recyclerview.HsRecyclerView;
  * 패키지명 : kr.co.hs.fileexplorer
  */
 
-public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver.OnEventListener, Comparator<String>{
+public class HsRecyclerFileView extends HsFileView implements HsFileObserver.OnEventListener, Comparator<String>{
 
     private String mCurrentPath;
-    private List<String> mFileList;
     private FilenameFilter mFilenameFilter;
-    private FileComparator mFileComparator;
     private HsFileObserver mHsFileObserver;
     private OnFileItemClickListener mOnFileItemClickListener;
 
 
     public HsRecyclerFileView(Context context) {
         super(context);
-        init();
     }
 
     public HsRecyclerFileView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     public HsRecyclerFileView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
     }
 
-    private void init(){
-        mFileList = new ArrayList<>();
-    }
 
 
     public void setOnFileItemClickListener(OnFileItemClickListener onFileItemClickListener) {
@@ -59,7 +51,7 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
     protected void itemClick(ViewHolder viewHolder, View view, int position) {
         super.itemClick(viewHolder, view, position);
         if(mOnFileItemClickListener != null){
-            File file = new File(mCurrentPath, mFileList.get(position));
+            File file = new File(mCurrentPath, getFileList().get(position));
             mOnFileItemClickListener.onFileItemClick(this, (FileViewHolder) viewHolder, view, position, file);
         }
     }
@@ -107,8 +99,8 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
 
     @Override
     public int compare(String o1, String o2) {
-        if(mFileComparator != null)
-            return mFileComparator.compare(mCurrentPath, o1, o2);
+        if(getFileComparator() != null)
+            return getFileComparator().compare(mCurrentPath, o1, o2);
         else
             return 0;
     }
@@ -126,17 +118,13 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
 
 
 
-    public List<String> getFileList() {
-        return mFileList;
-    }
+
 
     public FilenameFilter getFilenameFilter() {
         return mFilenameFilter;
     }
 
-    public FileComparator getFileComparator() {
-        return mFileComparator;
-    }
+
 
     public void setCurrentPath(String currentPath, OnCurrentPathResultListener listener){
         setCurrentPath(currentPath, null, null, listener);
@@ -152,7 +140,7 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
 
     public void setCurrentPath(String currentPath, FilenameFilter filenameFilter, FileComparator fileComparator, OnCurrentPathResultListener listener) {
         if(getAdapter() != null)
-            getAdapter().notifyItemRangeRemoved(0, mFileList.size());
+            getAdapter().notifyItemRangeRemoved(0, getFileList().size());
 
 
         File currentFile = new File(currentPath);
@@ -166,20 +154,20 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
             mFilenameFilter = filenameFilter;
             String[] items = currentFile.list(filenameFilter);
             if(items != null){
-                mFileList.clear();
-                mFileList.addAll(Arrays.asList(items));
+                getFileList().clear();
+                getFileList().addAll(Arrays.asList(items));
             }
         }else{
             String[] items = currentFile.list();
             if(items != null){
-                mFileList.clear();
-                mFileList.addAll(Arrays.asList(items));
+                getFileList().clear();
+                getFileList().addAll(Arrays.asList(items));
             }
         }
 
         if(fileComparator != null){
-            mFileComparator = fileComparator;
-            Collections.sort(mFileList, this);
+            getFileComparator() = fileComparator;
+            Collections.sort(getFileList(), this);
         }
 
         if(mHsFileObserver != null){
@@ -191,9 +179,9 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
         mHsFileObserver.startWatching();
 
         if(getAdapter() != null)
-            getAdapter().notifyItemRangeInserted(0, mFileList.size());
+            getAdapter().notifyItemRangeInserted(0, getFileList().size());
 
-        listener.onCurrentPathResult(mCurrentPath, mFileList);
+        listener.onCurrentPathResult(mCurrentPath, getFileList());
     }
 
     public String getCurrentPath() {
@@ -201,24 +189,24 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
     }
 
     private int getFileItemPosition(String name){
-        int idx = mFileList.indexOf(name);
+        int idx = getFileList().indexOf(name);
         if(idx < 0){
             File file = new File(name);
             name = file.getName();
-            idx = mFileList.indexOf(name);
+            idx = getFileList().indexOf(name);
         }
         return idx;
     }
     private File getFileItem(int position){
-        String fileItem = mFileList.get(position);
+        String fileItem = getFileList().get(position);
         File file = new File(getCurrentPath(), fileItem);
         return file;
     }
 
     private void addFileItem(String name){
-        mFileList.add(name);
-        if(mFileComparator != null)
-            Collections.sort(mFileList, this);
+        getFileList().add(name);
+        if(getFileComparator() != null)
+            Collections.sort(getFileList(), this);
         final int pos = getFileItemPosition(name);
         post(new Runnable() {
             @Override
@@ -229,9 +217,9 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
     }
 
     private void removeFileItem(String name){
-        final int pos = mFileList.indexOf(name);
+        final int pos = getFileList().indexOf(name);
         if(pos >= 0){
-            boolean result = mFileList.remove(name);
+            boolean result = getFileList().remove(name);
             if(result){
                 post(new Runnable() {
                     @Override
@@ -245,7 +233,7 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
     }
 
     private void changeFileItem(String name){
-        final int pos = mFileList.indexOf(name);
+        final int pos = getFileList().indexOf(name);
         if(pos >= 0){
             post(new Runnable() {
                 @Override
@@ -266,7 +254,7 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
             else{
                 HsRecyclerView hsRecyclerView = getRecyclerView();
                 if(hsRecyclerView instanceof HsRecyclerFileView){
-                    return ((HsRecyclerFileView) hsRecyclerView).mFileList.size();
+                    return ((HsRecyclerFileView) hsRecyclerView).getFileList().size();
                 }else{
                     return 0;
                 }
@@ -284,7 +272,7 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
             HsRecyclerView hsRecyclerView = getHsRecyclerView();
             if(hsRecyclerView instanceof HsRecyclerFileView){
                 String currentPath = ((HsRecyclerFileView) hsRecyclerView).mCurrentPath;
-                String name = ((HsRecyclerFileView) hsRecyclerView).mFileList.get(position);
+                String name = ((HsRecyclerFileView) hsRecyclerView).getFileList().get(position);
                 return new File(currentPath, name);
             }else{
                 return null;
@@ -292,9 +280,7 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
         }
     }
 
-    public interface FileComparator{
-        int compare(String dir, String fileName1, String fileName2);
-    }
+
 
     public interface OnCurrentPathResultListener{
         void onCurrentPathResult(String currentPath, List<String> filelist);
