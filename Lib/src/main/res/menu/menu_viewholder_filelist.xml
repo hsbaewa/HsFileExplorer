@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/Menu_Open"
+        android:title="@string/Menu_Open"
+        />
+    <item
+        android:id="@+id/Menu_Rename"
+        android:title="@string/Menu_Rename"
+        />
+    <item
+        android:id="@+id/Menu_Delete"
+        android:title="@string/Menu_Delete"
+        />
+</menu>

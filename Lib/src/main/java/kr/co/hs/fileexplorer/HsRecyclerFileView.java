@@ -113,7 +113,12 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
             return 0;
     }
 
-
+    @Override
+    public void setAdapter(Adapter adapter) {
+        super.setAdapter(adapter);
+        if(adapter != null)
+            adapter.notifyDataSetChanged();
+    }
 
     public interface OnFileItemClickListener{
         void onFileItemClick(HsRecyclerFileView var1, FileViewHolder var2, View var3, int var4, File item);
@@ -146,6 +151,17 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
     }
 
     public void setCurrentPath(String currentPath, FilenameFilter filenameFilter, FileComparator fileComparator) {
+        post(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+
+        if(getAdapter() != null)
+            getAdapter().notifyItemRangeRemoved(0, mFileList.size());
+
+
         File currentFile = new File(currentPath);
         if(currentFile.isDirectory()){
             mCurrentPath = currentPath;
@@ -181,7 +197,17 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
         mHsFileObserver = new HsFileObserver(mCurrentPath, this);
         mHsFileObserver.startWatching();
 
-        getAdapter().notifyDataSetChanged();
+        post(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+
+        if(getAdapter() != null)
+            getAdapter().notifyItemRangeInserted(0, mFileList.size());
+
+
     }
 
     public String getCurrentPath() {
@@ -207,24 +233,41 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
         mFileList.add(name);
         if(mFileComparator != null)
             Collections.sort(mFileList, this);
-        int pos = getFileItemPosition(name);
-        getAdapter().notifyItemInserted(pos);
+        final int pos = getFileItemPosition(name);
+        post(new Runnable() {
+            @Override
+            public void run() {
+                getAdapter().notifyItemInserted(pos);
+            }
+        });
     }
 
     private void removeFileItem(String name){
-        int pos = mFileList.indexOf(name);
+        final int pos = mFileList.indexOf(name);
         if(pos >= 0){
             boolean result = mFileList.remove(name);
             if(result){
-                getAdapter().notifyItemRemoved(pos);
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        getAdapter().notifyItemRemoved(pos);
+                    }
+                });
+
             }
         }
     }
 
     private void changeFileItem(String name){
-        int pos = mFileList.indexOf(name);
+        final int pos = mFileList.indexOf(name);
         if(pos >= 0){
-            getAdapter().notifyItemChanged(pos);
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    getAdapter().notifyItemChanged(pos);
+                }
+            });
+
         }
     }
 

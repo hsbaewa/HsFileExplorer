@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="LayoutMarginSmall">8dp</dimen>
+    <dimen name="LayoutMargin">16dp</dimen>
+    <dimen name="TextSizeMini">10dp</dimen>
+    <dimen name="TextSizeSmall">12dp</dimen>
+    <dimen name="TextSize">15dp</dimen>
+    <dimen name="TextSizeBig">20dp</dimen>
+</resources>

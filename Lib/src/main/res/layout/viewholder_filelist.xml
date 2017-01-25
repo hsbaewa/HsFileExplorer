@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:foreground="?android:attr/selectableItemBackground"
+              android:clickable="true"
+    >
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/SimpleDraweeViewIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="@dimen/LayoutMarginSmall"
+        android:layout_marginTop="@dimen/LayoutMarginSmall"
+        android:layout_marginBottom="@dimen/LayoutMarginSmall"
+        />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/LayoutMarginSmall"
+        android:layout_weight="1"
+        >
+        <TextView
+            android:id="@+id/TextViewLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sample"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/TextSizeSmall"
+            android:layout_marginBottom="@dimen/LayoutMarginSmall"
+            android:lines="1"
+            />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/TextViewSecondary"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sample"
+                android:textColor="@color/colorGrey500"
+                android:textSize="@dimen/TextSizeMini"
+                android:lines="1"
+                />
+
+            <TextView
+                android:id="@+id/TextViewThird"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sample"
+                android:textColor="@color/colorGrey500"
+                android:textSize="@dimen/TextSizeMini"
+                android:lines="1"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/Menubar"
+        android:theme="@style/MenubarTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        />
+
+
+</LinearLayout>

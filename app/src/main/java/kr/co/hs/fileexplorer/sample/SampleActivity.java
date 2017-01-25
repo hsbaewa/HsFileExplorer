@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +17,11 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
-import java.util.Comparator;
 
 import kr.co.hs.app.HsActivity;
 import kr.co.hs.app.OnRequestPermissionResult;
 import kr.co.hs.content.HsPermissionChecker;
-import kr.co.hs.fileexplorer.HsFileExplorerAdapter;
+import kr.co.hs.fileexplorer.HsFileExplorerFragment;
 import kr.co.hs.fileexplorer.HsRecyclerFileView;
 import kr.co.hs.widget.recyclerview.HsRecyclerView;
 
@@ -32,38 +33,19 @@ import kr.co.hs.widget.recyclerview.HsRecyclerView;
 
 public class SampleActivity extends HsActivity implements HsRecyclerView.OnItemClickListener{
 
-    private HsRecyclerFileView mHsRecyclerView;
-    private Adapter mAdapter;
+    Toolbar mToolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample);
 
-        mHsRecyclerView = (HsRecyclerFileView) findViewById(R.id.HsRecyclerView);
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        mHsRecyclerView.setLayoutManager(llm);
+        mToolbar = (Toolbar) findViewById(R.id.Toolbar);
+        setSupportActionBar(mToolbar);
 
-//        mAdapter = new Adapter(Environment.getExternalStorageDirectory(), new SampleFileFilter(), new FileCompare());
-        mAdapter = new Adapter();
-        mHsRecyclerView.setAdapter(mAdapter);
-
-        mHsRecyclerView.setOnItemClickListener(this);
-
-        HsPermissionChecker.requestPermissions(this, new String[]{
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                },
-                0,
-                new OnRequestPermissionResult() {
-                    @Override
-                    public void onResult(int i, @NonNull String[] strings, @NonNull int[] ints, boolean b) {
-                        if(b){
-                            mHsRecyclerView.setCurrentPath(Environment.getExternalStorageDirectory().getAbsolutePath(), new SampleFileNameFilter(), new FileCompare());
-                        }
-                    }
-                });
-
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.LinearLayoutContents, HsFileExplorerFragment.newInstance(Environment.getExternalStorageDirectory().getAbsolutePath()));
+        transaction.commit();
 
     }
 
