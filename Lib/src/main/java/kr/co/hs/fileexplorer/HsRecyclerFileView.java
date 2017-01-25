@@ -138,26 +138,19 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
         return mFileComparator;
     }
 
-    public void setCurrentPath(String currentPath){
-        setCurrentPath(currentPath, null, null);
+    public void setCurrentPath(String currentPath, OnCurrentPathResultListener listener){
+        setCurrentPath(currentPath, null, null, listener);
     }
 
-    public void setCurrentPath(String currentPath, FilenameFilter filenameFilter){
-        setCurrentPath(currentPath, filenameFilter, null);
+    public void setCurrentPath(String currentPath, FilenameFilter filenameFilter, OnCurrentPathResultListener listener){
+        setCurrentPath(currentPath, filenameFilter, null, listener);
     }
 
-    public void setCurrentPath(String currentPath, FileComparator fileComparator){
-        setCurrentPath(currentPath, null, fileComparator);
+    public void setCurrentPath(String currentPath, FileComparator fileComparator, OnCurrentPathResultListener listener){
+        setCurrentPath(currentPath, null, fileComparator, listener);
     }
 
-    public void setCurrentPath(String currentPath, FilenameFilter filenameFilter, FileComparator fileComparator) {
-        post(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        });
-
+    public void setCurrentPath(String currentPath, FilenameFilter filenameFilter, FileComparator fileComparator, OnCurrentPathResultListener listener) {
         if(getAdapter() != null)
             getAdapter().notifyItemRangeRemoved(0, mFileList.size());
 
@@ -197,17 +190,10 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
         mHsFileObserver = new HsFileObserver(mCurrentPath, this);
         mHsFileObserver.startWatching();
 
-        post(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        });
-
         if(getAdapter() != null)
             getAdapter().notifyItemRangeInserted(0, mFileList.size());
 
-
+        listener.onCurrentPathResult(mCurrentPath, mFileList);
     }
 
     public String getCurrentPath() {
@@ -308,5 +294,9 @@ public class HsRecyclerFileView extends HsRecyclerView implements HsFileObserver
 
     public interface FileComparator{
         int compare(String dir, String fileName1, String fileName2);
+    }
+
+    public interface OnCurrentPathResultListener{
+        void onCurrentPathResult(String currentPath, List<String> filelist);
     }
 }

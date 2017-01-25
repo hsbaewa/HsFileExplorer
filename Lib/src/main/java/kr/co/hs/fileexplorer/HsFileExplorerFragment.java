@@ -31,6 +31,7 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import kr.co.hs.app.HsFragment;
 import kr.co.hs.app.OnRequestPermissionResult;
@@ -42,7 +43,7 @@ import kr.co.hs.widget.recyclerview.HsRecyclerView;
  * Created by Bae on 2017-01-25.
  */
 
-public abstract class HsFileExplorerFragment extends HsFragment implements HsRecyclerFileView.OnFileItemClickListener, OnRequestPermissionResult, HsRecyclerView.OnHolderMenuItemListener, FilenameFilter, HsRecyclerFileView.FileComparator{
+public abstract class HsFileExplorerFragment extends HsFragment implements HsRecyclerFileView.OnFileItemClickListener, OnRequestPermissionResult, HsRecyclerView.OnHolderMenuItemListener, FilenameFilter, HsRecyclerFileView.FileComparator, HsRecyclerFileView.OnCurrentPathResultListener{
 
     public static final int MODE_GRID = 1;
     public static final int MODE_LIST = 2;
@@ -54,6 +55,7 @@ public abstract class HsFileExplorerFragment extends HsFragment implements HsRec
     HsRecyclerFileView mHsRecyclerFileView;
     GridLayoutManager mGridLayoutManager;
     Adapter mAdapter;
+    TextView mTextViewEmpty;
 
     String mPath;
 
@@ -76,6 +78,9 @@ public abstract class HsFileExplorerFragment extends HsFragment implements HsRec
         mHsRecyclerFileView.setLayoutManager(mGridLayoutManager);
 
 
+        mTextViewEmpty = (TextView) findViewById(R.id.TextViewEmpty);
+        mTextViewEmpty.setVisibility(View.GONE);
+
 
         String[] permission = {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -87,6 +92,8 @@ public abstract class HsFileExplorerFragment extends HsFragment implements HsRec
         mAdapter = new Adapter();
         mHsRecyclerFileView.setAdapter(mAdapter);
         mHsRecyclerFileView.setOnFileItemClickListener(this);
+
+
 
         setHasOptionsMenu(true);
     }
@@ -115,7 +122,7 @@ public abstract class HsFileExplorerFragment extends HsFragment implements HsRec
     @Override
     public void onResult(int i, @NonNull String[] strings, @NonNull int[] ints, boolean b) {
         if(b){
-            mHsRecyclerFileView.setCurrentPath(mPath, this, this);
+            mHsRecyclerFileView.setCurrentPath(mPath, this, this, this);
         }
     }
 
@@ -123,7 +130,7 @@ public abstract class HsFileExplorerFragment extends HsFragment implements HsRec
     @Override
     public void onFileItemClick(HsRecyclerFileView var1, HsRecyclerFileView.FileViewHolder var2, View var3, int var4, File item) {
         if(item.isDirectory()){
-            mHsRecyclerFileView.setCurrentPath(item.getAbsolutePath(), this, this);
+            mHsRecyclerFileView.setCurrentPath(item.getAbsolutePath(), this, this, this);
         }
     }
 
@@ -133,10 +140,33 @@ public abstract class HsFileExplorerFragment extends HsFragment implements HsRec
             return true;
         }else{
             File file = new File(mHsRecyclerFileView.getCurrentPath());
-            mHsRecyclerFileView.setCurrentPath(file.getParent(), this, this);
+            mHsRecyclerFileView.setCurrentPath(file.getParent(), this, this, this);
             return false;
         }
     }
+
+    @Override
+    public void onCurrentPathResult(String currentPath, List<String> filelist) {
+        if(filelist.size() == 0){
+            setVisibleEmptyMessage(View.VISIBLE);
+        }else{
+            setVisibleEmptyMessage(View.GONE);
+        }
+    }
+
+
+    private void setVisibleEmptyMessage(final int visible){
+        mTextViewEmpty.post(new Runnable() {
+            @Override
+            public void run() {
+                mTextViewEmpty.setText(R.string.EmptyFiles);
+                if(mTextViewEmpty.getVisibility() != visible)
+                    mTextViewEmpty.setVisibility(visible);
+            }
+        });
+
+    }
+
 
     class Adapter extends HsRecyclerFileView.FileAdapter<Holder>{
 
