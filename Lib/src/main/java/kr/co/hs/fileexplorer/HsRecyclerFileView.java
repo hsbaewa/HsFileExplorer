@@ -166,7 +166,7 @@ public class HsRecyclerFileView extends HsFileView implements HsFileObserver.OnE
         }
 
         if(fileComparator != null){
-            getFileComparator() = fileComparator;
+//            getFileComparator() = fileComparator;
             Collections.sort(getFileList(), this);
         }
 

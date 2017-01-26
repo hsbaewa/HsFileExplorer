@@ -13,9 +13,17 @@
     <string name="CreateFolderHint">생성할 폴더 이름을 입력하세요.</string>
     <string name="CreateFolderError">폴더 생성에 실패하였습니다.</string>
 
+    <string name="CreateFileTitle">파일 생성</string>
+    <string name="CreateFileHint">생성할 파일 이름을 입력하세요.</string>
+    <string name="CreateFileError">파일 생성에 실패하였습니다.</string>
+
     <string name="DeleteFileTitle">파일 삭제</string>
     <string name="DeleteFileDescription">%1$s 을 삭제하시겠습니까?</string>
     <string name="DeleteFileError">파일을 삭제하는데 실패하였습니다.</string>
 
-    <string name="EmptyFiles">빈 폴더 입니다.</string>
+    <string name="RenameFileTitle">파일 이름 변경</string>
+    <string name="RenameFileHint">변경할 파일 이름을 입력하세요.</string>
+    <string name="RenameFileError">파일 이름을 변경하는데 실패하였습니다.</string>
+
+    <string name="EmptyFiles">파일이 존재하지 않습니다.</string>
 </resources>

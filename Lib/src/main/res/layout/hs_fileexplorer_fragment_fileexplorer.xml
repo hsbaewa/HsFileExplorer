@@ -4,12 +4,12 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <kr.co.hs.fileexplorer.HsRecyclerFileView
+    <kr.co.hs.fileexplorer.v2.HsFileTreeRecyclerView
         android:id="@+id/HsRecyclerFileView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </kr.co.hs.fileexplorer.HsRecyclerFileView>
+    </kr.co.hs.fileexplorer.v2.HsFileTreeRecyclerView>
 
     <TextView
         android:id="@+id/TextViewEmpty"

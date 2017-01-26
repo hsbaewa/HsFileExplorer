@@ -23,6 +23,7 @@ import kr.co.hs.app.OnRequestPermissionResult;
 import kr.co.hs.content.HsPermissionChecker;
 import kr.co.hs.fileexplorer.HsFileExplorerFragment;
 import kr.co.hs.fileexplorer.HsRecyclerFileView;
+import kr.co.hs.fileexplorer.v2.HsFileRecyclerView;
 import kr.co.hs.widget.recyclerview.HsRecyclerView;
 
 /**
@@ -44,7 +45,7 @@ public class SampleActivity extends HsActivity implements HsRecyclerView.OnItemC
         setSupportActionBar(mToolbar);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.LinearLayoutContents, SampleFileFragment.newInstance(Environment.getExternalStorageDirectory().getAbsolutePath(), SampleFileFragment.MODE_LIST));
+        transaction.replace(R.id.LinearLayoutContents, SampleFragment2.newInstance(Environment.getExternalStorageDirectory().getAbsolutePath(), HsFileRecyclerView.MODE_LIST));
         transaction.commit();
 
     }
