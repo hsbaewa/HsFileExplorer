@@ -118,7 +118,7 @@ public class HsFileRecyclerView extends HsRecyclerView{
             mOnFileItemClickListener.onFileItemClick(this, viewHolder, view, position, getFile(position));
     }
 
-    protected void notifyItemRangeRemoved(final int start, final int range){
+    public void notifyItemRangeRemoved(final int start, final int range){
         post(new Runnable() {
             @Override
             public void run() {
@@ -128,7 +128,7 @@ public class HsFileRecyclerView extends HsRecyclerView{
         });
     }
 
-    protected void notifyItemRangeInserted(final int start, final int range){
+    public void notifyItemRangeInserted(final int start, final int range){
         post(new Runnable() {
             @Override
             public void run() {
@@ -138,7 +138,7 @@ public class HsFileRecyclerView extends HsRecyclerView{
         });
     }
 
-    protected void notifyItemRangeChanged(final int start, final int range){
+    public void notifyItemRangeChanged(final int start, final int range){
         post(new Runnable() {
             @Override
             public void run() {
@@ -169,7 +169,7 @@ public class HsFileRecyclerView extends HsRecyclerView{
             getAdapter().notifyItemRangeInserted(0, cnt);
     }
 
-    protected void addFileItem(File file){
+    public void addFileItem(File file){
         boolean result = getFiles().add(file);
         if(result){
             if(getFileComparator() != null)
@@ -189,14 +189,14 @@ public class HsFileRecyclerView extends HsRecyclerView{
         }
     }
 
-    protected void removeFileItem(File file){
+    public void removeFileItem(File file){
         int idx = getFiles().indexOf(file);
         if(idx >= 0){
             removeFileItem(idx);
         }
     }
 
-    protected void removeFileItem(final int position){
+    public void removeFileItem(final int position){
         File file = getFiles().remove(position);
         if(file != null){
             post(new Runnable() {
@@ -209,14 +209,14 @@ public class HsFileRecyclerView extends HsRecyclerView{
         }
     }
 
-    protected void changeFileItem(File file){
+    public void changeFileItem(File file){
         int idx = getFiles().indexOf(file);
         if(idx >= 0){
             changeFileItem(idx);
         }
     }
 
-    protected void changeFileItem(final int position){
+    public void changeFileItem(final int position){
         File file = getFile(position);
         if(file != null){
             post(new Runnable() {
